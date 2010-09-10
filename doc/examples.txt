@@ -1,0 +1,66 @@
+Example Mappings between Erlang and YAML
+========================================
+
+Example 1
+---------
+
+YAML
+
+- foo
+- bar
+- baz
+
+ERL
+
+[
+  <<"foo">>, 
+  <<"bar">>, 
+  <<"baz">> 
+]
+
+
+Example 2
+---------
+
+YAML
+
+foo: 1
+bar: 2
+baz: 3
+
+ERL
+
+[
+  {<<"foo">>, 1},
+  {<<"bar">>, 2},
+  {<<"baz">>, 3}
+]
+
+
+
+Example 3
+---------
+
+YAML
+
+foo:
+  - abc
+  - def
+  - ghi
+bar:
+  - jkl
+  - mno
+  - pqr
+
+ERL
+
+[
+  {<<"foo">>, [<<"abc">>,<<"def">>,<<"ghi">>]},
+  {<<"bar">>, [<<"jkl">>,<<"mno">>,<<"pqr">>]}
+]
+
+
+
+
+
+

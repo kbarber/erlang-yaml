@@ -1,7 +1,7 @@
 About
 =====
 
-This is a C driver for Erlang to support the Syck YAML parser library.
+This is a YAML parser.
 
 Installation
 ============
@@ -35,11 +35,6 @@ TODO
 Copyright and License
 =====================
 
-For now its:
-
-Copyright 2010 Kenneth E Barber
-
-Until further notice, although the plan is to have it belong to an organisation
-of some kind if I ever get around to assembling one.
+Copyright 2010 Bob.sh
 
 The license for this code is undecided as yet. Assume nothing.

@@ -17,8 +17,7 @@
 %% @end
 basic_data_test() ->
     Test = "basic_data",
-    Expected = <<"---
-teststring
+    Expected = <<"--- teststring
 ">>,
     Returned = yaml_encoder:encode(<<"teststring">>),
 

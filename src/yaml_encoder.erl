@@ -19,7 +19,12 @@
 encode(Data) ->
     % Run iteration functions return results (with header)
     Encoded = encode_data(Data,0),
-    <<"---\n", Encoded/binary>>.
+    case Data of
+        [_|_] ->
+            <<"---\n", Encoded/binary>>;
+        _ ->
+            <<"--- ", Encoded/binary>>
+    end.
     
 %% @doc
 %%

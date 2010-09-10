@@ -49,16 +49,19 @@ encode_data([First|Remainder],Level) ->
         {_Key,_Val} -> 
             EncodedFirst = encode_data(First,Level),
             <<EncodedFirst/binary, EncodedSequence/binary>>;
+        [{_,_}|_] ->
+            EncodedFirst = encode_data(First,Level+1),
+            <<Indent/binary, "-\n", EncodedFirst/binary, EncodedSequence/binary>>;
         _Scalar -> 
             EncodedFirst = encode_data(First,Level+1),
             <<Indent/binary, "- ", EncodedFirst/binary, EncodedSequence/binary>>
     end;
 
-encode_data([],Level) ->
+encode_data([],_Level) ->
     % ran out of list items, returning nothing
     <<>>;
 
-encode_data(Scalar,Level) ->
+encode_data(Scalar,_Level) ->
     % Its a scalar, just return it
     <<Scalar/binary, "\n">>.
 

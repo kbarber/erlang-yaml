@@ -95,3 +95,70 @@ asdf:
     ),
 
     ?assert(string:equal(Expected, Returned)).
+
+
+%% @doc Sequence of maps
+%% @end
+sequence_of_maps_test() ->
+    Test = "sequence_of_maps",
+    Expected = <<"---
+-
+  a: b
+  b: c
+-
+  d: e
+  e: f
+">>,
+    Returned = yaml_encoder:encode([
+        [
+            {<<"a">>,<<"b">>},
+            {<<"b">>,<<"c">>}
+        ],
+        [
+            {<<"d">>,<<"e">>},
+            {<<"e">>,<<"f">>}
+        ]
+    ]),
+
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
+        [ Test, Expected, Returned ]
+    ),
+
+    ?assert(string:equal(Expected, Returned)).
+
+
+%% @doc Map of map test
+%% @end
+map_of_map_test() ->
+    Test = "map_of_map",
+    Expected = <<"---
+foo:
+  foo: a
+  bar: b
+baz:
+  asdf: a
+  fdsa: b
+asdf:
+  aaaa: a
+  bbbb: b
+">>,
+    Returned = yaml_encoder:encode([
+        {<<"foo">>,[
+            {<<"foo">>,<<"a">>},
+            {<<"bar">>,<<"b">>}
+        ]},
+        {<<"baz">>,[
+            {<<"asdf">>,<<"a">>},
+            {<<"fdsa">>,<<"b">>}
+        ]},
+        {<<"asdf">>,[
+            {<<"aaaa">>,<<"a">>},
+            {<<"bbbb">>,<<"b">>}
+        ]}
+    ]),
+
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
+        [ Test, Expected, Returned ]
+    ),
+
+    ?assert(string:equal(Expected, Returned)).

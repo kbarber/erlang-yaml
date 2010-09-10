@@ -106,7 +106,7 @@ sequence_of_maps_test() ->
   a: b
   b: c
 -
-  d: e
+  d: 3
   e: f
 ">>,
     Returned = yaml_encoder:encode([
@@ -115,9 +115,33 @@ sequence_of_maps_test() ->
             {<<"b">>,<<"c">>}
         ],
         [
-            {<<"d">>,<<"e">>},
+            {<<"d">>,3},
             {<<"e">>,<<"f">>}
         ]
+    ]),
+
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
+        [ Test, Expected, Returned ]
+    ),
+
+    ?assert(string:equal(Expected, Returned)).
+
+
+%% @doc Sequence of Sequences test
+%% @end
+sequence_of_sequences_test() ->
+    Test = "sequence_of_sequences",
+    Expected = <<"---
+-
+  - a
+  - b
+-
+  - a
+  - b
+">>,
+    Returned = yaml_encoder:encode([
+        [<<"a">>,<<"b">>],
+        [<<"a">>,<<"b">>]
     ]),
 
     ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
@@ -146,6 +170,73 @@ asdf:
         {<<"foo">>,[
             {<<"foo">>,<<"a">>},
             {<<"bar">>,<<"b">>}
+        ]},
+        {<<"baz">>,[
+            {<<"asdf">>,<<"a">>},
+            {<<"fdsa">>,<<"b">>}
+        ]},
+        {<<"asdf">>,[
+            {<<"aaaa">>,<<"a">>},
+            {<<"bbbb">>,<<"b">>}
+        ]}
+    ]),
+
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
+        [ Test, Expected, Returned ]
+    ),
+
+    ?assert(string:equal(Expected, Returned)).
+
+
+%% @doc Very complex
+%% @end
+very_complex_test() ->
+    Test = "very_complex",
+    Expected = <<"---
+foo:
+  foo:
+    - test
+    -
+      foo: 123
+      bar: asdf
+  baz:
+    a: b
+    b: c
+    d:
+      -
+        - a
+        -
+          a: b
+      - asdf
+baz:
+  asdf: a
+  fdsa: b
+asdf:
+  aaaa: a
+  bbbb: b
+">>,
+    Returned = yaml_encoder:encode([
+        {<<"foo">>,[
+            {<<"foo">>,[
+                <<"test">>,
+                [
+                    {<<"foo">>,123},
+                    {<<"bar">>, <<"asdf">>}
+                ]
+            ]},
+            {<<"baz">>,[
+                {<<"a">>,<<"b">>},
+                {<<"b">>,<<"c">>},
+                {<<"d">>,[
+                    [
+                        <<"a">>,
+                        [
+                            {<<"a">>,<<"b">>}
+                        ]
+                    ],
+                    <<"asdf">>
+                ]}
+            ]}
         ]},
         {<<"baz">>,[
             {<<"asdf">>,<<"a">>},

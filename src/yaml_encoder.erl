@@ -52,6 +52,9 @@ encode_data([First|Remainder],Level) ->
         [{_,_}|_] ->
             EncodedFirst = encode_data(First,Level+1),
             <<Indent/binary, "-\n", EncodedFirst/binary, EncodedSequence/binary>>;
+        [_|_] ->
+            EncodedFirst = encode_data(First,Level+1),
+            <<Indent/binary, "-\n", EncodedFirst/binary, EncodedSequence/binary>>;
         _Scalar -> 
             EncodedFirst = encode_data(First,Level+1),
             <<Indent/binary, "- ", EncodedFirst/binary, EncodedSequence/binary>>
@@ -61,9 +64,15 @@ encode_data([],_Level) ->
     % ran out of list items, returning nothing
     <<>>;
 
-encode_data(Scalar,_Level) ->
+encode_data(Scalar,_Level) when is_binary(Scalar) ->
     % Its a scalar, just return it
-    <<Scalar/binary, "\n">>.
+    <<Scalar/binary, "\n">>;
+
+encode_data(Scalar,_Level) when is_integer(Scalar) ->
+    % Its a scalar, just return it - convert integer into binary
+    Int = list_to_binary(integer_to_list(Scalar)),
+    <<Int/binary, "\n">>.
+
 
 %% @doc Indent based on level
 %% @end

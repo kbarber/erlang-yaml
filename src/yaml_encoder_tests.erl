@@ -1,6 +1,10 @@
 %% --------------------------
 %% @copyright 2010 Bob.sh
-%% @doc Primary entry point for tests.
+%% @doc yaml_encoder test routines
+%%
+%% Tests here must always aim for 1.2 compliance of the YAML specification: 
+%%
+%% http://www.yaml.org/spec/1.2/spec.html
 %%
 %% @end
 %% --------------------------
@@ -12,13 +16,14 @@
 %% @doc Feed in a single string and compare results with expectations
 %% @end
 basic_data_test() ->
+    Test = "basic_data",
     Expected = <<"---
 teststring
 ">>,
     Returned = yaml_encoder:encode(<<"teststring">>),
 
-    error_logger:info_msg("Comparing this: ~p~nwith this: ~p~n", 
-        [ Expected, Returned ]
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n", 
+        [ Test, Expected, Returned ]
     ),
 
     ?assert(string:equal(Expected, Returned)).
@@ -27,6 +32,7 @@ teststring
 %% @doc Feed in a basic sequence and check output matches what you expect.
 %% @end
 basic_sequence_test() ->
+    Test = "basic_sequence",
     Expected = <<"---
 - foo
 - bar
@@ -34,8 +40,8 @@ basic_sequence_test() ->
 ">>,
     Returned = yaml_encoder:encode([<<"foo">>,<<"bar">>,<<"baz">>]),
 
-    error_logger:info_msg("Comparing this: ~p~nwith this: ~p~n", 
-        [ Expected, Returned ]
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n", 
+        [ Test, Expected, Returned ]
     ),
 
     ?assert(string:equal(Expected, Returned)).
@@ -44,6 +50,7 @@ basic_sequence_test() ->
 %% @doc Feed in a basic map and check output matches what you expect.
 %% @end
 basic_map_test() ->
+    Test = "basic_map",
     Expected = <<"---
 foo: bar
 baz: blah
@@ -55,9 +62,36 @@ asdf: fdsa
         {<<"asdf">>,<<"fdsa">>}
     ]),
 
-    error_logger:info_msg("Comparing this: ~p~nwith this: ~p~n", 
-        [ Expected, Returned ]
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n", 
+        [ Test, Expected, Returned ]
     ),
 
     ?assert(string:equal(Expected, Returned)).
 
+
+%% @doc Feed in a basic map and check output matches what you expect.
+%% @end
+map_of_sequences_test() ->
+    Test = "map_of_sequences",
+    Expected = <<"---
+foo:
+  - foo
+  - bar
+baz:
+  - asdf
+  - fdsa
+asdf:
+  - aaaa
+  - bbbb
+">>,
+    Returned = yaml_encoder:encode([
+        {<<"foo">>,[<<"foo">>,<<"bar">>]},
+        {<<"baz">>,[<<"asdf">>,<<"fdsa">>]},
+        {<<"asdf">>,[<<"aaaa">>,<<"bbbb">>]}
+    ]),
+
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
+        [ Test, Expected, Returned ]
+    ),
+
+    ?assert(string:equal(Expected, Returned)).

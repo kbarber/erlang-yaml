@@ -2,9 +2,7 @@
 %% @copyright 2010 Bob.sh
 %% @doc YAML encoder
 %%
-%% This code aims for 1.2 compliance of the YAML specification: 
-%%
-%% http://www.yaml.org/spec/1.2/spec.html
+
 %%
 %% @end
 %% --------------------------
@@ -20,34 +18,51 @@
 %% @end 
 encode(Data) ->
     % Run iteration functions return results (with header)
-    Header = <<"---\n">>,
-    Encoded = encode_data(Data),
-    <<Header/binary, Encoded/binary>>.
+    Encoded = encode_data(Data,0),
+    <<"---\n", Encoded/binary>>.
     
 %% @doc
 %%
-%% encode_data(Data)
+%% encode_data(Data, Level)
 %% returns: CompleteDocument
 %% @end
-encode_data([]) ->
-    % ran out of list items, returning nothing
-    <<"">>;
-
-encode_data({Key,Val}) ->
+encode_data({Key,Val},Level) ->
     % Its a map, grab the key, and re-run encode_data on the value, using
     % the results in your return
-    EncodedVal = encode_data(Val),
+    Indent = indent(Level),
 
-    <<Key/binary, ": ", EncodedVal/binary>>;
+    case Val of
+        [_|_] -> 
+            EncodedVal = encode_data(Val,Level+1),
+            <<Indent/binary, Key/binary, ":\n", EncodedVal/binary>>;
+        _Scalar ->
+            EncodedVal = encode_data(Val,Level),
+            <<Indent/binary, Key/binary, ": ", EncodedVal/binary>>
+    end;
 
-encode_data(Sequence) when is_list(Sequence) ->
+encode_data([First|Remainder],Level) ->
     % Its a sequence, so I should iterate across it
-    First = lists:nth(1, Sequence),
-    EncodedFirst = encode_data(First),
-    EncodedSequence = encode_data(lists:delete(First,Sequence)),
+    EncodedSequence = encode_data(Remainder,Level),
+    Indent = indent(Level),
 
-    <<EncodedFirst/binary, EncodedSequence/binary>>;
+    case First of
+        {_Key,_Val} -> 
+            EncodedFirst = encode_data(First,Level),
+            <<EncodedFirst/binary, EncodedSequence/binary>>;
+        _Scalar -> 
+            EncodedFirst = encode_data(First,Level+1),
+            <<Indent/binary, "- ", EncodedFirst/binary, EncodedSequence/binary>>
+    end;
 
-encode_data(Scalar) ->
+encode_data([],Level) ->
+    % ran out of list items, returning nothing
+    <<>>;
+
+encode_data(Scalar,Level) ->
     % Its a scalar, just return it
     <<Scalar/binary, "\n">>.
+
+%% @doc Indent based on level
+%% @end
+indent(Level) ->
+    binary:copy(<<"  ">>, Level).

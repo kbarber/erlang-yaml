@@ -9,6 +9,6 @@
 -export([start/0]).
 
 start() ->
-    error_logger:tty(true),
+    error_logger:tty(false),
     eunit:test(yaml_encoder,[verbose]),
     halt().

@@ -97,6 +97,28 @@ asdf:
     ?assert(string:equal(Expected, Returned)).
 
 
+%% @doc Feed in a basic map and check output matches what you expect.
+%% @end
+map_of_empty_sequences_test() ->
+    Test = "map_of_empty_sequences",
+    Expected = <<"---
+foo: []
+baz: []
+asdf: []
+">>,
+    Returned = yaml_encoder:encode([
+        {<<"foo">>,[]},
+        {<<"baz">>,[]},
+        {<<"asdf">>,[]}
+    ]),
+
+    ?debugFmt("~nTest: ~p~nExpect: ~p~nReturn: ~p~n",
+        [ Test, Expected, Returned ]
+    ),
+
+    ?assert(string:equal(Expected, Returned)).
+
+
 %% @doc Sequence of maps
 %% @end
 sequence_of_maps_test() ->

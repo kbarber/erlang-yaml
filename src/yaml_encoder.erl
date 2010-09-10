@@ -35,6 +35,9 @@ encode_data({Key,Val},Level) ->
         [_|_] -> 
             EncodedVal = encode_data(Val,Level+1),
             <<Indent/binary, Key/binary, ":\n", EncodedVal/binary>>;
+        [] ->
+            % Empty sequences will draw an empty sequence in flow format
+            <<Indent/binary, Key/binary, ": []\n">>;
         _Scalar ->
             EncodedVal = encode_data(Val,Level),
             <<Indent/binary, Key/binary, ": ", EncodedVal/binary>>

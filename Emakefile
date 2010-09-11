@@ -1,5 +1,5 @@
 %% --------------------------
-%% @copyright 2010 Kenneth Barber
+%% @copyright 2010 Bob.sh
 %% @doc Erlang emake definition for building Erlang code.
 %% 
 %% @end

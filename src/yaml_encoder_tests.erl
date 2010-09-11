@@ -17,7 +17,7 @@
 %% @end
 basic_data_test() ->
     Test = "basic_data",
-    Expected = <<"--- teststring
+    Expected = <<"--- \"teststring\"
 ">>,
     Returned = yaml_encoder:encode(<<"teststring">>),
 
@@ -33,9 +33,9 @@ basic_data_test() ->
 basic_sequence_test() ->
     Test = "basic_sequence",
     Expected = <<"---
-- foo
-- bar
-- baz
+- \"foo\"
+- \"bar\"
+- \"baz\"
 ">>,
     Returned = yaml_encoder:encode([<<"foo">>,<<"bar">>,<<"baz">>]),
 
@@ -51,9 +51,9 @@ basic_sequence_test() ->
 basic_map_test() ->
     Test = "basic_map",
     Expected = <<"---
-foo: bar
-baz: blah
-asdf: fdsa
+foo: \"bar\"
+baz: \"blah\"
+asdf: \"fdsa\"
 ">>,
     Returned = yaml_encoder:encode([
         {<<"foo">>,<<"bar">>},
@@ -74,14 +74,14 @@ map_of_sequences_test() ->
     Test = "map_of_sequences",
     Expected = <<"---
 foo:
-  - foo
-  - bar
+  - \"foo\"
+  - \"bar\"
 baz:
-  - asdf
-  - fdsa
+  - \"asdf\"
+  - \"fdsa\"
 asdf:
-  - aaaa
-  - bbbb
+  - \"aaaa\"
+  - \"bbbb\"
 ">>,
     Returned = yaml_encoder:encode([
         {<<"foo">>,[<<"foo">>,<<"bar">>]},
@@ -124,11 +124,11 @@ sequence_of_maps_test() ->
     Test = "sequence_of_maps",
     Expected = <<"---
 -
-  a: b
-  b: c
+  a: \"b\"
+  b: \"c\"
 -
   d: 3
-  e: f
+  e: \"f\"
 ">>,
     Returned = yaml_encoder:encode([
         [
@@ -154,11 +154,11 @@ sequence_of_sequences_test() ->
     Test = "sequence_of_sequences",
     Expected = <<"---
 -
-  - a
-  - b
+  - \"a\"
+  - \"b\"
 -
-  - a
-  - b
+  - \"a\"
+  - \"b\"
 ">>,
     Returned = yaml_encoder:encode([
         [<<"a">>,<<"b">>],
@@ -178,14 +178,14 @@ map_of_map_test() ->
     Test = "map_of_map",
     Expected = <<"---
 foo:
-  foo: a
-  bar: b
+  foo: \"a\"
+  bar: \"b\"
 baz:
-  asdf: a
-  fdsa: b
+  asdf: \"a\"
+  fdsa: \"b\"
 asdf:
-  aaaa: a
-  bbbb: b
+  aaaa: \"a\"
+  bbbb: \"b\"
 ">>,
     Returned = yaml_encoder:encode([
         {<<"foo">>,[
@@ -216,25 +216,25 @@ very_complex_test() ->
     Expected = <<"---
 foo:
   foo:
-    - test
+    - \"test\"
     -
       foo: 123
-      bar: asdf
+      bar: \"asdf\"
   baz:
-    a: b
-    b: c
+    a: \"b\"
+    b: \"c\"
     d:
       -
-        - a
+        - \"a\"
         -
-          a: b
-      - asdf
+          a: \"b\"
+      - \"asdf\"
 baz:
-  asdf: a
-  fdsa: b
+  asdf: \"a\"
+  fdsa: \"b\"
 asdf:
-  aaaa: a
-  bbbb: b
+  aaaa: \"a\"
+  bbbb: \"b\"
 ">>,
     Returned = yaml_encoder:encode([
         {<<"foo">>,[

@@ -73,8 +73,12 @@ encode_data([],_Level) ->
     <<>>;
 
 encode_data(Scalar,_Level) when is_binary(Scalar) ->
-    % Its a scalar, just return it
-    <<Scalar/binary, "\n">>;
+    % For strings, make sure we quote, and convert any non-printable chars
+    % to printable. I don't have a better way to do this today - it may not support
+    % utf stuff either.
+    Escaped = list_to_binary(lists:nth(3,lists:nth(1,io_lib:format("~p", [Scalar])))),
+
+    <<Escaped/binary, "\n">>;
 
 encode_data(Scalar,_Level) when is_integer(Scalar) ->
     % Its a scalar, just return it - convert integer into binary
